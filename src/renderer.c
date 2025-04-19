@@ -160,6 +160,15 @@ void render_walls(context_t *context)
     float norm;
     player->angle += 3 * PI / 4.0;
     char color[3];
+    int player_angle_offset;
+
+    player_angle_offset = (2 * PI - player->angle) / DEG_TO_RAD(player->FOV) * context->screen_size[0];
+    player_angle_offset %= context->screen_size[0];
+    if (player_angle_offset  < 0) {
+        player_angle_offset += context->screen_size[0];
+    }
+    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1});
+    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1});
 
     //add FOW
     for (int ray_index = 0; ray_index < player->ray_count; ray_index++) {
@@ -232,34 +241,6 @@ void render_walls(context_t *context)
         }
     }
 
-      for (int ray_index = 0; ray_index < player->ray_count; ray_index++) {
-
-        for (int ray_z = 0; ray_z < context->screen_size[1] / 2; ray_z++) {
-
-        ray_zangle = atan((2.0 * (ray_z - context->screen_size[1]/2 * 1) / context->screen_size[1]) * tan(half_fov));
-        angle = player->angle + (ray_index / (float)player->ray_count * DEG_TO_RAD(player->FOV));
-
-        ray[3] = cos(angle) * cos(player->head_angle + ray_zangle);
-        ray[4] = sin(angle) * cos(player->head_angle + ray_zangle);
-        ray[5] = sin(player->head_angle + ray_zangle);
-
-        n = 300 / ray[5];
-        x = ray[3] * n;
-        y = ray[4] * n;
-
-        x = ABS(fmod(x, SKY_WIDTH));
-        y = ABS(fmod(y, SKY_HEIGHT));
-
-        color[0] = sky[(int)y][(int)x][0];
-        color[1] = sky[(int)y][(int)x][1];
-        color[2] = sky[(int)y][(int)x][2];
-
-        SDL_SetRenderDrawColor(context->ren, color[0], color[1], color[2],  255);
-
-        SDL_RenderDrawPoint(context->ren, ray_index, ray_z);
-        }
-
-    }
     player->angle -= 3 * PI / 4.0;
     return;
 }

@@ -71,6 +71,7 @@ typedef struct {
     TTF_Font *font;
     line_t *lines;
     sprite_t *sprites;
+    sprite_t *sky;
     SDL_Surface *floor;
     int floor_width;
     int floor_height;
