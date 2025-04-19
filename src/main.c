@@ -22,6 +22,9 @@
 
 //blend sky w/ galax
 //lightsource in the dark
+//alpha in walls
+//fix sprite-reversing thingy
+//fix the horizon
 
 static int screen_size[2] = {1600 / SCALE, 920 / SCALE};
 static context_t context;

@@ -272,7 +272,6 @@ void render_walls(context_t *context)
         }*/
 
         SDL_SetRenderDrawColor(context->ren, color[0], color[1], color[2],  255);
-
         SDL_RenderDrawPoint(context->ren, ray_index, ray_z);
         }
     }
