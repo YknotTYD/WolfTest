@@ -20,7 +20,7 @@ void init_context(context_t *context, int screen_size[2])
     context->quit = 0;
 
     context->sky->texture = IMG_LoadTexture(context->ren, "assets/sky_.jpg");
-    context->night->texture = IMG_LoadTexture(context->ren, "assets/galax.jpg");
+    context->night->texture = IMG_LoadTexture(context->ren, "assets/milk.jpg");
     SDL_QueryTexture(context->sky->texture, 0, 0, &context->sky->width, &context->sky->height);
     SDL_QueryTexture(context->night->texture, 0, 0, &context->night->width, &context->night->height);
     SDL_SetTextureBlendMode(context->sky->texture, SDL_BLENDMODE_BLEND);

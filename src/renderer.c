@@ -190,11 +190,11 @@ void render_walls(context_t *context)
 
     time /= 255.0;
 
-    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1});
-    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1});
+    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1.75});
+    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1.75});
 
-    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1});
-    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1});
+    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1.75});
+    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1.75});
 
     //add FOW
     for (int ray_index = 0; ray_index < player->ray_count; ray_index++) {
@@ -253,9 +253,9 @@ void render_walls(context_t *context)
         color[2] = sally[(int)y][(int)x][2];
 
         //printf("%u =>", color[0] < 0 ? 255 + color[0] : color[0]);
-        color[0] = ((float)color[0] * (1 + time)) / 2;
-        color[1] = ((float)color[1] * (1 + time)) / 2;
-        color[2] = ((float)color[2] * (1 + time)) / 2;
+        color[0] = ((float)color[0] * (0.5 + time * 1.5)) / 2;
+        color[1] = ((float)color[1] * (0.5 + time * 1.5)) / 2;
+        color[2] = ((float)color[2] * (0.5 + time * 1.5)) / 2;
         //printf("%u\n", color[0] < 0 ? 255 + color[0] : color[0]);
 
         /*color[0] = ((int)color[0] + 125) / 2;
