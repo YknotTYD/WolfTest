@@ -159,7 +159,7 @@ void render_walls(context_t *context)
     //long double plane;
     float norm;
     player->angle += 3 * PI / 4.0;
-    char color[3];
+    unsigned char color[3];
     int player_angle_offset;
 
     player_angle_offset = (2 * PI - player->angle) / DEG_TO_RAD(player->FOV) * context->screen_size[0];
@@ -170,20 +170,25 @@ void render_walls(context_t *context)
 
     static float skyalpha;
 
+    float time;
     skyalpha += 1;
     skyalpha = fmod(skyalpha, 255 * 2);
 
     //skyalpha = 256;
 
     if (skyalpha > 255) {
-        SDL_SetTextureAlphaMod(context->sky->texture, 255 - skyalpha + 255);
+        SDL_SetTextureAlphaMod(context->sky->texture, 255 -skyalpha + 255);
+        time = 255 -skyalpha + 255;
         SDL_SetTextureAlphaMod(context->night->texture, skyalpha - 255 );
         //printf("%f\n", skyalpha - 255);
     } else {
         SDL_SetTextureAlphaMod(context->sky->texture, skyalpha);
+        time = skyalpha;
         SDL_SetTextureAlphaMod(context->night->texture, 255 - skyalpha);
         //printf("%f\n", 255 - skyalpha);
     }
+
+    time /= 255.0;
 
     SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1});
     SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1});
@@ -247,9 +252,15 @@ void render_walls(context_t *context)
         color[1] = sally[(int)y][(int)x][1];
         color[2] = sally[(int)y][(int)x][2];
 
-        color[0] = (color[0] * 2) / 2;
-        color[1] = (color[1] * 2) / 2;
-        color[2] = (color[2] * 2) / 2;
+        //printf("%u =>", color[0] < 0 ? 255 + color[0] : color[0]);
+        color[0] = ((float)color[0] * (1 + time)) / 2;
+        color[1] = ((float)color[1] * (1 + time)) / 2;
+        color[2] = ((float)color[2] * (1 + time)) / 2;
+        //printf("%u\n", color[0] < 0 ? 255 + color[0] : color[0]);
+
+        /*color[0] = ((int)color[0] + 125) / 2;
+        color[1] = ((int)color[1] + 125) / 2;
+        color[2] = ((int)color[2] + 125) / 2;*/
 
         /*if (norm > 1000) {
             norm = norm - 1000;
