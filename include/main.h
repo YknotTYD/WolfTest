@@ -72,6 +72,7 @@ typedef struct {
     line_t *lines;
     sprite_t *sprites;
     sprite_t *sky;
+    sprite_t *night;
     SDL_Surface *floor;
     int floor_width;
     int floor_height;

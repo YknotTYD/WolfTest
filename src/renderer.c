@@ -167,8 +167,29 @@ void render_walls(context_t *context)
     if (player_angle_offset  < 0) {
         player_angle_offset += context->screen_size[0];
     }
+
+    static float skyalpha;
+
+    skyalpha += 1;
+    skyalpha = fmod(skyalpha, 255 * 2);
+
+    //skyalpha = 256;
+
+    if (skyalpha > 255) {
+        SDL_SetTextureAlphaMod(context->sky->texture, 255 - skyalpha + 255);
+        SDL_SetTextureAlphaMod(context->night->texture, skyalpha - 255 );
+        //printf("%f\n", skyalpha - 255);
+    } else {
+        SDL_SetTextureAlphaMod(context->sky->texture, skyalpha);
+        SDL_SetTextureAlphaMod(context->night->texture, 255 - skyalpha);
+        //printf("%f\n", 255 - skyalpha);
+    }
+
     SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1});
     SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1});
+
+    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1});
+    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1});
 
     //add FOW
     for (int ray_index = 0; ray_index < player->ray_count; ray_index++) {
@@ -225,6 +246,10 @@ void render_walls(context_t *context)
         color[0] = sally[(int)y][(int)x][0];
         color[1] = sally[(int)y][(int)x][1];
         color[2] = sally[(int)y][(int)x][2];
+
+        color[0] = (color[0] * 2) / 2;
+        color[1] = (color[1] * 2) / 2;
+        color[2] = (color[2] * 2) / 2;
 
         /*if (norm > 1000) {
             norm = norm - 1000;

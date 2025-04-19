@@ -20,6 +20,8 @@
 //check surface locking/unlocking perfs 
 //add a mode7
 
+//blend sky w/ galax
+
 static int screen_size[2] = {1600 / SCALE, 920 / SCALE};
 static context_t context;
 

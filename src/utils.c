@@ -5,11 +5,13 @@
 void init_context(context_t *context, int screen_size[2])
 {
     sprite_t *sky = malloc(sizeof(sprite_t));
+    sprite_t *night = malloc(sizeof(sprite_t));
 
     TTF_Init();
     IMG_Init(IMG_INIT_PNG);
     context->font = TTF_OpenFont("assets/fonts/SourceCodePro-Medium.ttf", 60 / SCALE);
     context->sky = sky;
+    context->night = night;
 
     
     context->win = SDL_CreateWindow("Mood-2", 100, 75, screen_size[0] * SCALE, screen_size[1] * SCALE, SDL_WINDOW_SHOWN);
@@ -18,9 +20,13 @@ void init_context(context_t *context, int screen_size[2])
     context->quit = 0;
 
     context->sky->texture = IMG_LoadTexture(context->ren, "assets/sky_.jpg");
+    context->night->texture = IMG_LoadTexture(context->ren, "assets/galax.jpg");
     SDL_QueryTexture(context->sky->texture, 0, 0, &context->sky->width, &context->sky->height);
+    SDL_QueryTexture(context->night->texture, 0, 0, &context->night->width, &context->night->height);
+    SDL_SetTextureBlendMode(context->sky->texture, SDL_BLENDMODE_BLEND);
+    SDL_SetTextureBlendMode(context->night->texture, SDL_BLENDMODE_BLEND);
 
-    if (context->sky->texture == 0) {
+    if (context->sky->texture == 0 || context->night->texture == 0) {
         printf("%s\n", SDL_GetError());
         exit(69);
     }
