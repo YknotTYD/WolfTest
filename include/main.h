@@ -30,6 +30,8 @@
     #define RAY_LEN 1e+9
     #define WALLHEIGHT 31000
     #define FPS 120
+    #define MAX(a, b) ((a) > (b) ? (a) : (b))
+    #define MIN(a, b) ((a) < (b) ? (a) : (b))
     #define RENDER_NORMULT 10
     #define PLAYER_STEP_SPEED 50
     #define PLAYER_STEP_HEIGHT 7

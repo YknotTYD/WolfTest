@@ -171,6 +171,12 @@ void render_walls(context_t *context)
     static float skyalpha;
 
     float time;
+    int horizon = context->screen_size[1] / 2;
+
+    horizon = context->screen_size[1] / 2.0 * (1 - tan(player->head_angle) / tan(half_fov));
+    horizon++;
+    horizon = MAX(horizon, 0);
+
     skyalpha += 1;
     skyalpha = fmod(skyalpha, 255 * 2);
 
@@ -190,21 +196,21 @@ void render_walls(context_t *context)
 
     time /= 255.0;
 
-    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1.75});
-    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1.75});
+    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1]});
+    SDL_RenderCopy(context->ren, context->sky->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1]});
 
-    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1] / 1.75});
-    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1] / 1.75});
+    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset, 0, context->screen_size[0], context->screen_size[1]});
+    SDL_RenderCopy(context->ren, context->night->texture, 0, &(SDL_Rect){player_angle_offset - context->screen_size[0], 0, context->screen_size[0], context->screen_size[1]});
 
     //add FOW
     for (int ray_index = 0; ray_index < player->ray_count; ray_index++) {
 
-        for (int ray_z = context->screen_size[1] / 2; ray_z < context->screen_size[1]; ray_z++) {
+        for (int ray_z = horizon; ray_z < context->screen_size[1]; ray_z++) {
 
 
         //plane = (2.0 * ray_z / (context->screen_size[1] + 1)) - 1.0;
         //ray_zangle = atan(plane * tan(half_fov));
-        ray_zangle = atan((2.0 * (ray_z - context->screen_size[1]/2 * 1) / context->screen_size[1]) * tan(half_fov));
+        ray_zangle = atan((2.0 * (ray_z - context->screen_size[1]/2) / context->screen_size[1]) * tan(half_fov));
         //ray_zangle = context->screen_size[1] - (ray_z - context->screen_size[1] * 0) * 0.01;
 
 
@@ -218,6 +224,10 @@ void render_walls(context_t *context)
         ray[3] = cos(angle) * cos(player->head_angle + ray_zangle);
         ray[4] = sin(angle) * cos(player->head_angle + ray_zangle);
         ray[5] = sin(player->head_angle + ray_zangle);
+
+        //sin(t + x) == 0
+        //ray_zangle == kPI - player->head_angle
+        //
 
         /*{bx + rx * n;
          by + ry * n;

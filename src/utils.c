@@ -134,8 +134,10 @@ void update_vel(context_t *context)
     context->vel[0] = context->mouse_pos[0] - context->screen_size[0] / 2;
     context->vel[1] = context->mouse_pos[1] - context->screen_size[1] / 2;
 
-    //printf("%i\n", context->vel[0]);
-    //context->player->head_angle -= 0.01;//(float)context->vel[0] * (float)1e-2;
+    context->player->head_angle += context->vel[1] * 5e-3;
+    context->player->head_angle = fmod(context->player->head_angle, PI * 2);
+    context->player->head_angle = MIN(context->player->head_angle, 1);
+    context->player->head_angle = MAX(context->player->head_angle, -1);
 
     /*if ((SDL_GetWindowFlags(context->win) & SDL_WINDOW_MOUSE_FOCUS) == 0 ||
         SDL_GetMouseFocus() != context->win) {
